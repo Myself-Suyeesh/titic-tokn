@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { estimateInputCost } from './cost';
+import { estimateInputCost, estimateOutputCost } from './cost';
 import type { ModelInfo } from './models';
 
 const model: ModelInfo = {
@@ -21,5 +21,12 @@ describe('estimateInputCost', () => {
 
   it('is zero for no tokens', () => {
     expect(estimateInputCost(0, model)).toBe(0);
+  });
+});
+
+describe('estimateOutputCost', () => {
+  it('multiplies tokens by the per-million output price', () => {
+    expect(estimateOutputCost(800, model)).toBeCloseTo(0.008);
+    expect(estimateOutputCost(0, model)).toBe(0);
   });
 });

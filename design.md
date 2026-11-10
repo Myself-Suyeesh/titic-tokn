@@ -66,14 +66,16 @@ Both families are open source (SIL Open Font License). Bundle the fonts with the
 
 ### 5.1 Floating card
 
-Top to bottom: header, number, unit line, meter, footer, status line.
+Top to bottom: header, number, unit line, context line, meter, footer, status line.
 
 - **Header:** model chip on the left (for example "GPT-4o · exact", "Claude Sonnet · est."); pause or resume button on the right.
 - **Pause button:** 44 × 44 px hit area (visually small, negative margin keeps the header tight); label "Pause capture" or "Resume capture" for assistive tech.
 - **Number:** current token count, thousands separators.
 - **Unit line:** "tokens in your prompt" by default; the near-limit state replaces it with a trim hint; non-live states replace it with "last count · not live".
+- **Context line:** "In context ~94,700 · visible conversation only", 12 px, `--text-muted`, directly above the meter. Shown only when the page shows at least one message. It is the whole conversation in context (visible history plus the prompt being typed); the meter, the percentage, the trim hint and the cost all use this total, while the big number stays the prompt. It is not dimmed in non-live states. It can wrap to two lines; the card grows.
+- **Not-loaded note:** when the page has unloaded some messages (long chats on ChatGPT keep tall empty spacers for off-screen messages), a "+" follows the number and the line adds " · 12 messages not loaded" ("1 message not loaded" in the singular). Its tooltip reads "ChatGPT unloads off-screen messages in long chats. Scroll through the chat once to include them." The remembered count of a message that was loaded earlier keeps being used after it unloads.
 - **Meter:** segmented bar, 18 px tall; segments are 2 px wide on a 5 px pitch. Filled segments use the state colour, unfilled ones use `--meter-track`.
-- **Footer:** left "$0.062 input" (or "est." for estimated models), right "19% of 128k". Values in `--text`, labels in `--text-muted`.
+- **Footer:** left "$0.062 input" (or "est." for estimated models), right "19% of 128k". Values in `--text`, labels in `--text-muted`. The cost is the input price times the whole context; its tooltip also gives the latest visible reply as output ("Last reply ~800 tokens ≈ $0.008 as output").
 - **Status line:** icon plus "State · source".
 
 ### 5.2 Collapsed pill

@@ -10,6 +10,8 @@ const adapter: SiteAdapter = {
   getPromptElement: (doc) => doc.querySelector<HTMLElement>('#box'),
   readPromptText: (el) => el.textContent ?? '',
   getModelLabel: () => null,
+  getConversationRoot: () => null,
+  getMessages: () => [],
 };
 
 describe('watchPrompt', () => {

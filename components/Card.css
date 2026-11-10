@@ -152,6 +152,11 @@ button:focus-visible {
   color: var(--text-muted);
 }
 
+.context {
+  margin-top: 2px;
+  color: var(--text-muted);
+}
+
 .meter {
   --seg: var(--segment-ok);
   --fill: var(--state-ok);
