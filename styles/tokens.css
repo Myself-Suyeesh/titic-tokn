@@ -1,0 +1,22 @@
+/* Mirrors design.md §2-4 and §10. Milestone 1 subset; add tokens to design.md first. */
+:host {
+  --card-bg: #16171a;
+  --text: #f3f1ec;
+  --text-muted: #b9b6ae;
+  --state-ok: #7bd88f;
+  --state-warn: #f2b84b;
+  --state-danger: #f26b5b;
+  --state-idle: #8c897f;
+  --chip-bg: rgba(255, 255, 255, 0.09);
+  --divider: rgba(255, 255, 255, 0.1);
+  --card-edge: rgba(255, 255, 255, 0.08);
+  --meter-track: rgba(255, 255, 255, 0.16);
+
+  --radius-card: 22px;
+  --radius-pill: 999px;
+  --card-width: 320px;
+  --card-shadow: 0 18px 40px rgba(20, 18, 12, 0.28), inset 0 0 0 1px var(--card-edge);
+
+  --font-ui: Inter, system-ui, sans-serif;
+  --font-num: 'Space Grotesk', system-ui, sans-serif;
+}
