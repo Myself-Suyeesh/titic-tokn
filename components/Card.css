@@ -1,0 +1,50 @@
+.card {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2147483647;
+  box-sizing: border-box;
+  width: var(--card-width);
+  padding: 16px 18px;
+  border-radius: var(--radius-card);
+  background: var(--card-bg);
+  color: var(--text);
+  box-shadow: var(--card-shadow);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.4;
+  user-select: none;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-muted);
+  cursor: grab;
+  touch-action: none;
+}
+
+.card-header:active {
+  cursor: grabbing;
+}
+
+.chip {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: var(--chip-bg);
+}
+
+.count {
+  margin: 10px 0 2px;
+  font-family: var(--font-num);
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  color: var(--text-muted);
+}

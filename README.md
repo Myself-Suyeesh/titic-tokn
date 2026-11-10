@@ -4,7 +4,7 @@
 
 Tictic Tokn shows how many tokens your prompt will use while you type, updates when the reply finishes, and keeps a running estimate of the whole conversation, with an approximate cost and how full the context window is. Everything runs locally in your browser.
 
-> **Status: pre-alpha, in planning.** No code has been written yet, so there is nothing to install. This README describes what the MVP will do and is updated as each milestone lands. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the current state.
+> **Status: pre-alpha.** Milestone 1 is built: on chatgpt.com a floating card shows a live token count for the prompt box. Model detection, cost, the context bar, the status line, pause, Claude.ai and Gemini are still to come. The feature list below describes the finished MVP; see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for exactly what works today.
 
 ## Why
 
@@ -40,9 +40,9 @@ Tictic Tokn shows how many tokens your prompt will use while you type, updates w
 - Reads only the prompt box, visible reply and model label. No keystroke logging.
 - Open source, so you can check.
 
-## Install and use (once the MVP is built)
+## Install and use
 
-Not available yet. The plan is a sideloaded Chrome extension:
+The extension is not on any store yet. For now you can build it and load it unpacked in Chrome (Node 22 or newer):
 
 ```bash
 git clone https://github.com/Myself-Suyeesh/titic-tokn.git
@@ -51,7 +51,9 @@ npm install
 npm run build
 ```
 
-Then open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked** and select `.output/chrome-mv3`. Open ChatGPT, Claude.ai or Gemini and start typing.
+Then open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked** and select `.output/chrome-mv3`. Open chatgpt.com and start typing: the card shows the token count of your prompt. (Claude.ai and Gemini arrive in a later milestone.)
+
+For development: `npm run dev` (live reload), `npm run check` (typecheck, lint, tests, build).
 
 ## Tech
 
@@ -73,4 +75,4 @@ Site adapters are small, isolated files so that fixing a site after a layout cha
 
 ## Licence
 
-MIT (the `LICENSE` file will be added with the first code). Bundled fonts keep their own OFL licence notices.
+MIT, see [LICENSE](LICENSE). Bundled fonts keep their own OFL licence notices.
