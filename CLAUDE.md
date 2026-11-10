@@ -113,3 +113,10 @@ Milestones follow `prd.md` §15: 1 Skeleton and live count → 2 Model, cost, st
 - Before a milestone: state a short plan with verify steps.
 - After each milestone: run `npm run check`, fix everything, **update `docs/DEVELOPMENT.md`** (status, decisions, what changed, how to verify) and **README.md** if user-visible behaviour changed, commit with a clear message, summarize what changed and what to verify, then stop.
 - Docs must always describe the current state of the repo, not the plan. Mark anything unbuilt as planned.
+
+### Git and approval workflow
+- **One branch per milestone or feature**, created by Claude from an up-to-date `main` right before work starts: `feat/skeleton-live-count` (M1), `feat/model-cost-status` (M2), `feat/reply-update-conversation-total` (M3), `chore/polish-release-prep` (M4). Split a large milestone into smaller `feat/…` branches only after telling the user.
+- Check that `main` contains the previous milestone before branching; if not, tell the user.
+- Doc updates go on the same branch as the code they describe.
+- **The user pushes and merges.** Claude never pushes, force-pushes or merges. When a milestone is verified (`npm run check` passes, docs updated), tell the user it is time to push and give the exact commands.
+- **Explain before changing.** Before editing files or running git commands, say what is being changed, how, and what issues it could cause or resolve, then ask for approval. Warn before any destructive git command (reset, `checkout -B`, force push).
