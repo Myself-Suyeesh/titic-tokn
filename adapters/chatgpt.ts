@@ -29,6 +29,8 @@ function textOf(node: Node): string {
 
 export const chatgptAdapter: SiteAdapter = {
   id: 'chatgpt',
+  name: 'ChatGPT',
+  modelFamily: 'openai',
 
   matches(url) {
     return url.hostname === 'chatgpt.com';
@@ -36,8 +38,19 @@ export const chatgptAdapter: SiteAdapter = {
 
   getPromptElement(doc) {
     for (const selector of PROMPT_SELECTORS) {
-      const el = doc.querySelector<HTMLElement>(selector);
-      if (el && !isSecureField(el)) return el;
+      const candidates = Array.from(doc.querySelectorAll<HTMLElement>(selector)).filter(
+        (el) => !isSecureField(el),
+      );
+      if (candidates.length === 0) continue;
+      // ChatGPT keeps old composers in the page, hidden, after you switch chats.
+      // Prefer the one with focus, then a visible one, then the first.
+      const active = doc.activeElement;
+      return (
+        candidates.find((el) => active !== null && el.contains(active)) ??
+        candidates.find((el) => el.getClientRects().length > 0) ??
+        candidates[0] ??
+        null
+      );
     }
     return null;
   },
@@ -45,5 +58,12 @@ export const chatgptAdapter: SiteAdapter = {
   readPromptText(el) {
     if (el instanceof HTMLTextAreaElement) return el.value;
     return textOf(el);
+  },
+
+  // ChatGPT's free plan shows no model name anywhere on the page, so there is
+  // nothing to read and the user picks a model. A selector for paid plans that
+  // show a model switcher can be added here.
+  getModelLabel() {
+    return null;
   },
 };

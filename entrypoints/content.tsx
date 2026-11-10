@@ -7,14 +7,9 @@ import '@fontsource/space-grotesk/latin-600.css';
 import '../styles/tokens.css';
 import { chatgptAdapter } from '../adapters/chatgpt';
 import type { SiteAdapter } from '../adapters/types';
-import { Card } from '../components/Card';
-import { usePromptTokens } from '../lib/use-prompt-tokens';
+import { App } from '../components/App';
 
 const ADAPTERS: SiteAdapter[] = [chatgptAdapter];
-
-function App({ adapter }: { adapter: SiteAdapter }) {
-  return <Card tokens={usePromptTokens(adapter)} />;
-}
 
 export default defineContentScript({
   matches: ['https://chatgpt.com/*'],

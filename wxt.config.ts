@@ -5,6 +5,6 @@ export default defineConfig({
   manifest: {
     name: 'Tictic Tokn',
     description: 'A live token meter that floats over AI chat sites. Local only.',
-    permissions: [],
+    permissions: ['storage'],
   },
 });

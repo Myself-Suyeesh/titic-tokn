@@ -4,7 +4,7 @@
 
 Tictic Tokn shows how many tokens your prompt will use while you type, updates when the reply finishes, and keeps a running estimate of the whole conversation, with an approximate cost and how full the context window is. Everything runs locally in your browser.
 
-> **Status: pre-alpha.** Milestone 1 is built: on chatgpt.com a floating card shows a live token count for the prompt box. Model detection, cost, the context bar, the status line, pause, Claude.ai and Gemini are still to come. The feature list below describes the finished MVP; see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for exactly what works today.
+> **Status: pre-alpha.** Milestones 1 and 2 are done: on chatgpt.com a floating card shows a live token count, an estimated cost, a context-window bar and a status line, with a model picker, pause and a collapsed pill. Reply tracking, the conversation total, Claude.ai and Gemini are still to come. The feature list below describes the finished MVP; see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for exactly what works today.
 
 ## Why
 
@@ -26,7 +26,8 @@ Tictic Tokn shows how many tokens your prompt will use while you type, updates w
 
 | Model family | Count | Label |
 | --- | --- | --- |
-| OpenAI-style (open tokenizer) | Exact | `exact` |
+| OpenAI models the tokenizer library lists (GPT-4o, GPT-5 up to 5.6 Sol/Terra/Luna, o-series) | Exact | `exact` |
+| Newer OpenAI models it does not list yet (GPT-6 family) | Counted with the closest known tokenizer | `est.` |
 | Claude, Gemini | Heuristic estimate | `est.` |
 
 - Costs are **API-equivalent estimates** from a bundled public price table (with its snapshot date). They exclude hidden thinking and system prompts, and are not an invoice.
@@ -51,7 +52,7 @@ npm install
 npm run build
 ```
 
-Then open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked** and select `.output/chrome-mv3`. Open chatgpt.com and start typing: the card shows the token count of your prompt. (Claude.ai and Gemini arrive in a later milestone.)
+Then open `chrome://extensions`, enable **Developer mode**, choose **Load unpacked** and select `.output/chrome-mv3`. Open chatgpt.com and start typing: pick your model once from the chip on the card (ChatGPT's free plan shows no model name to detect), and the card shows the token count, estimated cost and how full the context window is. (Claude.ai and Gemini arrive in a later milestone.)
 
 For development: `npm run dev` (live reload), `npm run check` (typecheck, lint, tests, build).
 

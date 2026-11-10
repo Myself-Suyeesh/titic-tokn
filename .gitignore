@@ -6,6 +6,7 @@ node_modules/
 
 # WXT / build output
 .output/
+chrome-mv3/
 .wxt/
 dist/
 

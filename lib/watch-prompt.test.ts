@@ -4,9 +4,12 @@ import { watchPrompt } from './watch-prompt';
 
 const adapter: SiteAdapter = {
   id: 'test',
+  name: 'Test',
+  modelFamily: 'openai',
   matches: () => true,
   getPromptElement: (doc) => doc.querySelector<HTMLElement>('#box'),
   readPromptText: (el) => el.textContent ?? '',
+  getModelLabel: () => null,
 };
 
 describe('watchPrompt', () => {
