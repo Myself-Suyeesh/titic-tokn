@@ -4,7 +4,7 @@
 
 Tictic Tokn shows how many tokens your prompt will use while you type, updates when the reply finishes, and keeps a running estimate of the whole conversation, with an approximate cost and how full the context window is. Everything runs locally in your browser.
 
-> **Status: pre-alpha.** Milestones 1 and 2 are done: on chatgpt.com a floating card shows a live token count, an estimated cost, a context-window bar and a status line, with a model picker, pause and a collapsed pill. Reply tracking, the conversation total, Claude.ai and Gemini are still to come. The feature list below describes the finished MVP; see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for exactly what works today.
+> **Status: pre-alpha.** Milestones 1 and 2 are done, and ChatGPT's conversation total is done too: on chatgpt.com a floating card shows a live token count, how much of the context window the whole visible conversation uses, an estimated cost and a status line, with a model picker, pause and a collapsed pill. Claude.ai and Gemini are still to come. The feature list below describes the finished MVP; see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for exactly what works today.
 
 ## Why
 
@@ -18,7 +18,7 @@ Tictic Tokn shows how many tokens your prompt will use while you type, updates w
 - Live token count for the prompt box as you type.
 - Model detection from the page, with a manual picker as a fallback.
 - Cost estimate and context-window bar (green below 70%, amber from 70%, red from 90%).
-- Update after the reply finishes, plus a conversation total ("visible conversation only").
+- Update after the reply finishes, plus a conversation total ("visible conversation only"). *(ChatGPT so far; Claude.ai and Gemini are next.)*
 - Status line with four states: **Tracking**, **Paused**, **Not tracking**, **Ignoring**.
 - Password and payment fields are never read. A pause button stops all capture.
 

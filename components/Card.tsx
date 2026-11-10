@@ -12,6 +12,14 @@ import { StatusLine } from './StatusLine';
 
 const COST_TIP = 'API-equivalent estimate, excludes hidden thinking and system prompt';
 
+const NOT_LOADED_TIP =
+  'ChatGPT unloads off-screen messages in long chats. Scroll through the chat once to include them.';
+
+function costTip(readout: Readout): string {
+  if (readout.replyCost === null) return COST_TIP;
+  return `Input cost of the whole context. Last reply ~${formatCompact(readout.replyTokens)} tokens ≈ ${formatCost(readout.replyCost)} as output. ${COST_TIP}`;
+}
+
 interface CardProps {
   readout: Readout;
   state: TrackingState;
@@ -78,6 +86,14 @@ export function Card({
         {readout.tokens.toLocaleString('en-US')}
       </div>
       <div className="unit">{unit}</div>
+      {readout.hasHistory && (
+        <div className="context" title={readout.notLoaded > 0 ? NOT_LOADED_TIP : undefined}>
+          In context ~{readout.contextTokens.toLocaleString('en-US')}
+          {readout.notLoaded > 0 ? '+' : ''} · visible conversation only
+          {readout.notLoaded > 0 &&
+            ` · ${readout.notLoaded} ${readout.notLoaded === 1 ? 'message' : 'messages'} not loaded`}
+        </div>
+      )}
       <Meter ratio={readout.ratio ?? 0} tone={tone} />
 
       <div className="footer">
@@ -88,7 +104,7 @@ export function Card({
           </>
         ) : (
           <>
-            <span title={COST_TIP}>
+            <span title={costTip(readout)}>
               <b>{formatCost(readout.cost)}</b> {readout.exact ? 'input' : 'est.'}
             </span>
             <span>
