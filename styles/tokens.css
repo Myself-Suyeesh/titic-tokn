@@ -1,4 +1,4 @@
-/* Mirrors design.md §2-4 and §10. Milestone 1 subset; add tokens to design.md first. */
+/* Mirrors design.md §2-4 and §10. Add tokens to design.md first. */
 :host {
   --card-bg: #16171a;
   --text: #f3f1ec;
@@ -15,6 +15,16 @@
   --radius-card: 22px;
   --radius-pill: 999px;
   --card-width: 320px;
+
+  --meter-height: 18px;
+  --meter-pitch: 5px;
+  --segment-ok: 2px;
+  --segment-warn: 3px;
+  --segment-danger: 4px;
+  --control-size: 32px;
+  --hit-size: 44px;
+  --pill-height: 44px;
+  --pill-shadow: 0 10px 24px rgba(20, 18, 12, 0.25);
   --card-shadow: 0 18px 40px rgba(20, 18, 12, 0.28), inset 0 0 0 1px var(--card-edge);
 
   --font-ui: Inter, system-ui, sans-serif;

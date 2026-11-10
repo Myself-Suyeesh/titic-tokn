@@ -1,69 +1,104 @@
-import { useRef, useState } from 'react';
-import type { CSSProperties, PointerEvent } from 'react';
-import './Card.css';
+import { useState } from 'react';
+import { formatCompact, formatCost, formatPercent } from '../core/format';
+import type { ModelInfo } from '../core/models';
+import type { Readout } from '../core/readout';
+import type { TrackingState } from '../core/status';
+import { MinusIcon, PauseIcon, PlayIcon } from './icons';
+import { Meter } from './Meter';
+import type { MeterTone } from './Meter';
+import { ModelChip } from './ModelChip';
+import { ModelPicker } from './ModelPicker';
+import { StatusLine } from './StatusLine';
+
+const COST_TIP = 'API-equivalent estimate, excludes hidden thinking and system prompt';
 
 interface CardProps {
-  tokens: number;
+  readout: Readout;
+  state: TrackingState;
+  /** Site name for the status line, for example "ChatGPT". */
+  source: string;
+  model: ModelInfo | null;
+  models: ModelInfo[];
+  canPick: boolean;
+  onPick: (model: ModelInfo) => void;
+  paused: boolean;
+  onTogglePause: () => void;
+  onCollapse: () => void;
 }
 
-interface Position {
-  left: number;
-  top: number;
-}
-
-export function Card({ tokens }: CardProps) {
-  const cardRef = useRef<HTMLElement>(null);
-  const grab = useRef<{ dx: number; dy: number } | null>(null);
-  const [position, setPosition] = useState<Position | null>(null);
-
-  const onPointerDown = (e: PointerEvent<HTMLElement>) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    grab.current = { dx: e.clientX - rect.left, dy: e.clientY - rect.top };
-    e.currentTarget.setPointerCapture(e.pointerId);
-    e.preventDefault(); // keep focus in the page's prompt box
-  };
-
-  const onPointerMove = (e: PointerEvent<HTMLElement>) => {
-    const card = cardRef.current;
-    if (!grab.current || !card) return;
-    const maxLeft = window.innerWidth - card.offsetWidth;
-    const maxTop = window.innerHeight - card.offsetHeight;
-    setPosition({
-      left: Math.min(Math.max(0, e.clientX - grab.current.dx), Math.max(0, maxLeft)),
-      top: Math.min(Math.max(0, e.clientY - grab.current.dy), Math.max(0, maxTop)),
-    });
-  };
-
-  const onPointerUp = () => {
-    grab.current = null;
-  };
-
-  const style: CSSProperties | undefined = position
-    ? { left: position.left, top: position.top, right: 'auto', bottom: 'auto' }
-    : undefined;
+export function Card({
+  readout,
+  state,
+  source,
+  model,
+  models,
+  canPick,
+  onPick,
+  paused,
+  onTogglePause,
+  onCollapse,
+}: CardProps) {
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const live = state === 'tracking';
+  const tone: MeterTone = live && readout.level ? readout.level : 'idle';
+  const unit = live ? (readout.hint ?? 'tokens in your prompt') : 'last count · not live';
 
   return (
-    <section
-      ref={cardRef}
-      className="card"
-      style={style}
-      aria-label="Tictic Tokn token meter"
-      onMouseDown={(e) => e.preventDefault()}
-    >
-      <div
-        className="card-header"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
-      >
-        {/* Placeholder until model detection lands in milestone 2. */}
-        <span className="chip">GPT-4o · exact</span>
+    <section className={`card${live ? '' : ' dim'}`} aria-label="Tictic Tokn token meter">
+      <div className="card-header" data-drag="">
+        <ModelChip model={model} canPick={canPick} open={pickerOpen} onToggle={() => setPickerOpen((o) => !o)} />
+        <div className="actions">
+          <button type="button" className="icon-btn" aria-label="Collapse to pill" onClick={onCollapse}>
+            <MinusIcon />
+          </button>
+          <button
+            type="button"
+            className="pause-btn"
+            aria-label={paused ? 'Resume capture' : 'Pause capture'}
+            onClick={onTogglePause}
+          >
+            {paused ? <PlayIcon /> : <PauseIcon />}
+          </button>
+        </div>
       </div>
-      <div className="count">{tokens.toLocaleString('en-US')}</div>
-      <div className="unit">tokens in your prompt</div>
+
+      {pickerOpen && (
+        <ModelPicker
+          models={models}
+          selectedId={model?.id ?? null}
+          onSelect={(m) => {
+            onPick(m);
+            setPickerOpen(false);
+          }}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
+
+      <div className={`count${live && readout.level && readout.level !== 'ok' ? ` count--${readout.level}` : ''}`}>
+        {readout.tokens.toLocaleString('en-US')}
+      </div>
+      <div className="unit">{unit}</div>
+      <Meter ratio={readout.ratio ?? 0} tone={tone} />
+
+      <div className="footer">
+        {readout.cost === null || readout.contextWindow === null || readout.ratio === null ? (
+          <>
+            <span>est.</span>
+            <span>pick a model</span>
+          </>
+        ) : (
+          <>
+            <span title={COST_TIP}>
+              <b>{formatCost(readout.cost)}</b> {readout.exact ? 'input' : 'est.'}
+            </span>
+            <span>
+              <b>{formatPercent(readout.ratio)}</b> of {formatCompact(readout.contextWindow)}
+            </span>
+          </>
+        )}
+      </div>
+
+      <StatusLine state={state} source={source} />
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { chatgptAdapter } from './chatgpt';
 
 // Trimmed from the real chatgpt.com home composer (free plan, Nov 2026).
@@ -47,6 +47,37 @@ describe('chatgptAdapter', () => {
   it('turns soft line breaks into newlines', () => {
     prompt().innerHTML = '<p>a<br>b</p>';
     expect(chatgptAdapter.readPromptText(prompt())).toBe('a\nb');
+  });
+
+  it('reports no model label (the free plan shows none)', () => {
+    expect(chatgptAdapter.getModelLabel(document)).toBeNull();
+  });
+
+  describe('with an old hidden composer left in the page after switching chats', () => {
+    const composer = (id: string) =>
+      `<div data-composer-input=""><div id="${id}" contenteditable="true" role="textbox" class="ProseMirror" tabindex="0"><p><br class="ProseMirror-trailingBreak"></p></div></div>`;
+
+    function show(el: HTMLElement) {
+      vi.spyOn(el, 'getClientRects').mockReturnValue([{}] as unknown as DOMRectList);
+    }
+
+    beforeEach(() => {
+      document.body.innerHTML = composer('old') + composer('current');
+    });
+
+    it('prefers the focused composer even when it comes second', () => {
+      document.getElementById('current')!.focus();
+      expect(prompt().id).toBe('current');
+    });
+
+    it('prefers the visible composer when nothing has focus', () => {
+      show(document.getElementById('current')!);
+      expect(prompt().id).toBe('current');
+    });
+
+    it('falls back to the first composer when none can be told apart', () => {
+      expect(prompt().id).toBe('old');
+    });
   });
 
   it('returns null when there is no prompt box', () => {

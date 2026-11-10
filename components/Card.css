@@ -1,8 +1,31 @@
-.card {
+/* Values and structure follow design.md; colours and sizes come from tokens.css. */
+
+.shell {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 2147483647;
+  user-select: none;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--text-muted);
+  outline-offset: 2px;
+}
+
+/* Card */
+
+.card {
   box-sizing: border-box;
   width: var(--card-width);
   padding: 16px 18px;
@@ -13,7 +36,6 @@
   font-family: var(--font-ui);
   font-size: 12px;
   line-height: 1.4;
-  user-select: none;
 }
 
 .card-header {
@@ -30,10 +52,83 @@
 }
 
 .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 3px 9px;
   border-radius: var(--radius-pill);
   background: var(--chip-bg);
 }
+
+.chip--button {
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-size);
+  height: var(--control-size);
+  color: var(--text-muted);
+}
+
+/* 44 px hit area, visually small: the negative margin keeps the header tight. */
+.pause-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hit-size);
+  height: var(--hit-size);
+  margin: -10px -10px -10px 0;
+  color: var(--text-muted);
+}
+
+/* Model picker */
+
+.picker {
+  max-height: 208px;
+  margin: 10px 0 0;
+  padding: 6px 0 0;
+  border-top: 1px solid var(--divider);
+  list-style: none;
+  overflow-y: auto;
+}
+
+.picker button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: var(--control-size);
+  padding: 0 6px;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  text-align: left;
+}
+
+.picker button:hover {
+  background: var(--chip-bg);
+}
+
+.picker-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.picker .tag {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Count, unit line, meter, footer */
 
 .count {
   margin: 10px 0 2px;
@@ -45,6 +140,149 @@
   font-variant-numeric: tabular-nums;
 }
 
+.count--warn {
+  color: var(--state-warn);
+}
+
+.count--danger {
+  color: var(--state-danger);
+}
+
 .unit {
   color: var(--text-muted);
+}
+
+.meter {
+  --seg: var(--segment-ok);
+  --fill: var(--state-ok);
+  position: relative;
+  height: var(--meter-height);
+  margin-top: 12px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--meter-track) 0 var(--seg),
+    transparent var(--seg) var(--meter-pitch)
+  );
+}
+
+.meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: repeating-linear-gradient(90deg, var(--fill) 0 var(--seg), transparent var(--seg) var(--meter-pitch));
+  transition: width 150ms ease;
+}
+
+.meter--warn {
+  --seg: var(--segment-warn);
+  --fill: var(--state-warn);
+}
+
+.meter--danger {
+  --seg: var(--segment-danger);
+  --fill: var(--state-danger);
+}
+
+.meter--idle {
+  --fill: var(--state-idle);
+}
+
+/* Not live: only the number and the meter dim; unit line and footer stay at full strength. */
+.dim .count,
+.dim .meter {
+  opacity: 0.4;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  color: var(--text-muted);
+}
+
+.footer b {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Status line */
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--divider);
+  color: var(--text-muted);
+}
+
+.status b {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.status-icon {
+  flex: none;
+}
+
+.status-icon--ok {
+  color: var(--state-ok);
+}
+
+.status-icon--warn {
+  color: var(--state-warn);
+}
+
+.status-icon--idle {
+  color: var(--state-idle);
+}
+
+.status-icon--muted {
+  color: var(--text-muted);
+}
+
+/* Collapsed pill */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--pill-height);
+  padding: 0 18px 0 14px;
+  border-radius: var(--radius-pill);
+  background: var(--card-bg);
+  color: var(--text);
+  box-shadow: var(--pill-shadow);
+  font-family: var(--font-num);
+  font-size: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: grab;
+  touch-action: none;
+}
+
+.pill .marker--ok {
+  color: var(--state-ok);
+}
+
+.pill .marker--warn {
+  color: var(--state-warn);
+}
+
+.pill .marker--danger {
+  color: var(--state-danger);
+}
+
+.pill .marker--idle {
+  color: var(--state-idle);
+}
+
+.pill.dim .pill-count {
+  opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meter-fill {
+    transition: none;
+  }
 }

@@ -78,7 +78,12 @@ Top to bottom: header, number, unit line, meter, footer, status line.
 
 ### 5.2 Collapsed pill
 
-Dot in the state colour plus the token count. Three examples in the design: green 24,860, amber 94,700, red 118,200. **Open:** the control that collapses the card into this pill is not drawn yet.
+Marker in the state colour plus the token count. Three examples in the design: green 24,860, amber 94,700, red 118,200.
+
+- **Collapse control:** a 32 × 32 px minus button in the card header, left of the pause button; label "Collapse to pill".
+- **Expand:** a click on the pill (without dragging) restores the card; label "Expand token meter". The pill keeps the card's position and can be dragged.
+- **Marker, live:** shape follows the context state so colour is never the only signal: circle (healthy), triangle (nearing the limit), square (over the limit); 10 px, in the state colour.
+- **Marker, not live:** the status icon (pause glyph, hollow ring or padlock) in `--state-idle`, with the count at 40% opacity.
 
 ### 5.3 Compare row
 
@@ -95,6 +100,13 @@ Used for "Compare models · same prompt". Three columns, each with model name an
 
 State word in `--text` at weight 500, the rest in `--text-muted`.
 
+### 5.5 Model picker
+
+- The model chip is a button with a small caret; label "Choose model". A click opens a list inside the card, under the header.
+- Each row: model name on the left (Inter 13 px), "exact" or "est." on the right in `--text-muted`; rows at least 32 px tall; the selected row has a check mark and `aria-current`. Selecting a row closes the list; Escape also closes it.
+- **Model not detected** (no label on the page and nothing chosen yet): the chip reads "Pick a model · est."; the count is a generic estimate (about 4 characters per token); the footer reads "est." on the left and "pick a model" on the right; the meter is empty in `--state-idle`.
+- A chosen model is remembered per site.
+
 ## 6. States
 
 | State | Number | Meter | Unit line | Footer |
@@ -106,7 +118,11 @@ State word in `--text` at weight 500, the rest in `--text-muted`.
 
 **Thresholds (defaults, adjustable):** green below 70% of the context window, amber from 70%, red from 90%.
 
-**Trim hint copy:** the design currently reads "trim ~12k to stay under 80%" next to a 74% reading, which is contradictory. Write hints from the real target, for example "trim ~12k to get under 65%".
+**Trim hint copy:** the original design read "trim ~12k to stay under 80%" next to a 74% reading, which was contradictory. Hints are written from the real target, the amber threshold: "trim ~12k to get under 70%" from 70% up to the window size. At or above 100%: "over the window by ~12k".
+
+**State is not colour alone (meter and pill):** meter segments widen with the state: 2 px (healthy), 3 px (nearing), 4 px (over), all on the 5 px pitch. The pill marker changes shape (see 5.2).
+
+**Large numbers:** window sizes and hints use compact form: 128k, 272k, 1.05M.
 
 ## 7. Content rules
 
@@ -149,6 +165,16 @@ Subtle number change (short fade or tick); meter fill eases between values. No b
   --radius-pill: 999px;
   --card-width: 320px;
 
+  --meter-height: 18px;
+  --meter-pitch: 5px;
+  --segment-ok: 2px;
+  --segment-warn: 3px;
+  --segment-danger: 4px;
+  --control-size: 32px;
+  --hit-size: 44px;
+  --pill-height: 44px;
+  --pill-shadow: 0 10px 24px rgba(20,18,12,.25);
+
   --font-ui: Inter, sans-serif;
   --font-num: 'Space Grotesk', sans-serif;
 }
@@ -156,12 +182,9 @@ Subtle number change (short fade or tick); meter fill eases between values. No b
 
 ## 11. Open design items
 
-- Collapse control and the card-to-pill transition.
-- Model picker (dropdown on the model chip) and the "Model not detected" state.
 - Settings: allow-list, price table, hotkeys, optional API keys.
 - Empty and first-run states (0 tokens, nothing captured yet).
-- Full-card red state (only the red pill exists today).
 - Clipboard or hotkey source label for Phase 2 (for example "Clipboard · 2s ago").
 - Thinking-token display ("thinking: at least ~N tokens, est.", with a timer).
 - Light theme, click-through indicator and tray icon.
-- Very large numbers (for example 1,000,000-token windows) and narrow widths.
+- Narrow widths.
